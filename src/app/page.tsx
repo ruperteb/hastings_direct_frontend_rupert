@@ -1,101 +1,178 @@
-import Image from "next/image";
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const mainArticle = {
+    title: 'The Bright Future of Web 3.0?',
+    description:
+      'We dive into the next evolution of the web that claims to put the power of the platforms back into the hands of the people. But is it really fulfilling its promise?',
+    imageUrl: '/images/main-image.jpg',
+    ctaButton: {
+      name: 'READ MORE',
+      url: '/article?id=144',
+    },
+  };
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const sidebar = {
+    title: 'New',
+    articles: [
+      {
+        title: 'Hydrogen VS Electric Cars',
+        description: 'Will hydrogen-fueled cars ever catch up to EVs?',
+        url: '/article?id=124',
+      },
+      {
+        title: 'The Downsides of AI Artistry',
+        description:
+          'What are the possible adverse effects of on-demand AI image generation?',
+        url: '/article?id=132',
+      },
+      {
+        title: 'Is VC Funding Drying Up?',
+        description:
+          'Private funding by VC firms is down 50% YOY. We take a look at what that means.',
+        url: '/article?id=82',
+      },
+    ],
+  };
+
+  const articles = [
+    {
+      title: 'Reviving Retro PCs',
+      description: 'What happens when old PCs are given modern upgrades?',
+      imageUrl: '/images/article1-image.jpg',
+    },
+    {
+      title: 'Top 10 Laptops of 2022',
+      description: 'Our best picks for various needs and budgets.',
+      imageUrl: '/images/article2-image.jpg',
+    },
+    {
+      title: 'The Growth of Gaming',
+      description: 'How the pandemic has sparked fresh opportunities.',
+      imageUrl: '/images/article3-image.jpg',
+    },
+  ];
+
+  // I wanted to maintain this functionality in server components as far as possible, so avoided using media query hooks etc.
+  const getMainImagePath = (breakpoint: string, path: string) => {
+    switch (breakpoint) {
+      case 'desktop':
+        return path.replace('main-image', 'main-image-desktop');
+      case 'mobile':
+        return path.replace('main-image', 'main-image-mobile');
+
+      default:
+        return path.replace('main-image', 'main-image-desktop');
+    }
+  };
+
+  return (
+    <main className="pt-12">
+      <div className="grid w-full grid-cols-1 grid-rows-2 gap-y-16 lg:grid-cols-3 lg:gap-0">
+        {/* Main Article */}
+        <section
+          id="main-article"
+          className="col-span-2 row-span-2 flex flex-col lg:mr-8"
+        >
+          {/* One of these two image components will always be hidden, depending on the breakpoint */}
+          <Image
+            src={getMainImagePath('desktop', mainArticle.imageUrl)}
+            alt="Main article image"
+            width={1460}
+            height={600}
+            className="hidden w-full md:flex"
+            priority
+          />
+          <Image
+            src={getMainImagePath('mobile', mainArticle.imageUrl)}
+            alt="Main article image"
+            width={668}
+            height={600}
+            className="w-full md:hidden"
+            priority
+          />
+          <div
+            id="Main article content"
+            className="flex w-full flex-col pt-8 xl:flex-row"
           >
+            <h1 className="w-full pb-6 text-6xl font-bold lg:pb-3 xl:w-1/2 xl:pr-12">
+              {mainArticle.title}
+            </h1>
+            <div className="flex w-full flex-col justify-between xl:w-1/2 xl:pl-5">
+              <p className="pb-6 text-base leading-[1.6rem] tracking-wide text-neutral-dark-grayish-blue xl:pb-0">
+                {mainArticle.description}
+              </p>
+              <Link href={mainArticle.ctaButton.url}>
+                {/* Not sure about the border on this button, from the design it seemed like there might be one so I included it */}
+                <button className="border border-primary-soft-orange bg-primary-soft-red px-8 py-3 text-base font-bold leading-normal tracking-[0.2em] duration-200 hover:border-neutral-very-dark-blue hover:bg-neutral-very-dark-blue hover:text-neutral-off-white">
+                  {mainArticle.ctaButton.name}
+                </button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        {/* Side Bar */}
+        <section
+          id="sidebar"
+          className="col-span-1 row-span-2 h-full w-full bg-neutral-very-dark-blue px-6 py-8"
+        >
+          <div className="flex h-full flex-col">
+            <h2 className="text-4xl font-bold text-primary-soft-orange">
+              {sidebar.title}
+            </h2>
+
+            <ul className="mt-8 flex h-full flex-col justify-between">
+              {sidebar.articles.map((article, index) => (
+                <>
+                  <li key={article.title} className="flex flex-col">
+                    <Link href={article.url} className="group flex flex-col">
+                      <span className="text-lg font-bold text-white duration-75 group-hover:text-primary-soft-orange">
+                        {article.title}
+                      </span>
+                      <span className="mt-2 text-base text-neutral-grayish-blue">
+                        {article.description}
+                      </span>
+                    </Link>
+                  </li>
+                  {index !== sidebar.articles.length - 1 && (
+                    <div className="my-6 h-[1px] w-full bg-neutral-grayish-blue" />
+                  )}
+                </>
+              ))}
+            </ul>
+          </div>
+        </section>
+      </div>
+      {/* Articles */}
+      <section
+        id="articles"
+        className="grid gap-8 pt-16 xl:grid-cols-3 xl:gap-0"
+      >
+        {articles.map((article, index) => (
+          <div key={article.title} className="flex lg:mr-4">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src={article.imageUrl}
+              alt={`${article.title} image`}
+              width={200}
+              height={254}
+              className="h-32 w-auto"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <div className="flex flex-col pl-4 md:pl-6">
+              <h2 className="text-3xl font-bold text-primary-soft-red">
+                {`${index + 1}`.padStart(2, '0')}
+              </h2>
+              {/* I presume there should be url for these links? */}
+              <Link href="/" className="hover:text-primary-soft-red">
+                <h3 className="mt-2 text-lg font-bold">{article.title}</h3>
+              </Link>
+              <p className="mt-2 text-base text-neutral-dark-grayish-blue">
+                {article.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </section>
+    </main>
   );
 }
