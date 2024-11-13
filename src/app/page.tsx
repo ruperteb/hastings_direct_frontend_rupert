@@ -24,6 +24,7 @@ export default async function Home() {
       <div className="grid w-full grid-cols-1 grid-rows-2 gap-y-16 lg:grid-cols-3 lg:gap-0">
         {/* Main Article */}
         <section
+          aria-labelledby="main-article-title"
           id="main-article"
           className="col-span-2 row-span-2 flex flex-col lg:mr-8"
         >
@@ -48,7 +49,10 @@ export default async function Home() {
             id="Main article content"
             className="flex w-full flex-col pt-8 xl:flex-row"
           >
-            <h1 className="w-full pb-6 text-6xl font-bold lg:pb-3 xl:w-1/2 xl:pr-12">
+            <h1
+              id="main-article-title"
+              className="w-full pb-6 text-6xl font-bold lg:pb-3 xl:w-1/2 xl:pr-12"
+            >
               {data.mainArticle.title}
             </h1>
             <div className="flex w-full flex-col justify-between xl:w-1/2 xl:pl-5">
@@ -66,11 +70,15 @@ export default async function Home() {
         </section>
         {/* Side Bar */}
         <section
+          aria-labelledby="sidebar-title"
           id="sidebar"
           className="col-span-1 row-span-2 h-full w-full bg-neutral-very-dark-blue px-6 py-8"
         >
           <div className="flex h-full flex-col">
-            <h2 className="text-4xl font-bold text-primary-soft-orange">
+            <h2
+              id="sidebar-title"
+              className="text-4xl font-bold text-primary-soft-orange"
+            >
               {data.sidebar.title}
             </h2>
 
@@ -99,6 +107,7 @@ export default async function Home() {
       {/* Articles */}
       <section
         id="articles"
+        aria-label="Articles"
         className="grid gap-8 pt-16 xl:grid-cols-3 xl:gap-0"
       >
         {data.articles.map((article, index) => (

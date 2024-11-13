@@ -87,6 +87,7 @@ const MobileMenu = ({ navItems }: MobileMenuProps) => {
     <div className="self-center md:hidden">
       {/* Menu Button */}
       <button
+        aria-label="Menu button"
         className={clsx(
           'relative z-50 flex h-8 w-10 flex-col justify-between',
           open && scrollbarWidth && `translate-x-[-${scrollbarWidth}px]`
