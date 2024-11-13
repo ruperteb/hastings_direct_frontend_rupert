@@ -2,36 +2,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import MobileMenu from './mobileMenu';
+import { getData } from '@/lib/functions/data';
 
-const Header = () => {
-  const links = [
-    {
-      name: 'Home',
-      url: '/',
-    },
-    {
-      name: 'New',
-      url: '/new',
-    },
-    {
-      name: 'Popular',
-      url: '/popular',
-    },
-    {
-      name: 'Trending',
-      url: '/trending',
-    },
-    {
-      name: 'Categories',
-      url: '/categories',
-    },
-  ];
+const Header = async () => {
+  const data = await getData();
+
   return (
     <header className="flex w-full">
       <div className="flex w-full justify-between">
-        <Image src="/images/logo.svg" alt="Logo" width={65} height={40} />
-        <nav className="gap-12 hidden md:flex">
-          {links.map((link) => (
+        <Link href={'/'}>
+          <Image src="/images/logo.svg" alt="Logo" width={65} height={40} />
+        </Link>
+        <nav className="hidden gap-12 md:flex">
+          {data.navItems.map((link) => (
             <Link
               key={link.name}
               href={link.url}
@@ -41,7 +24,7 @@ const Header = () => {
             </Link>
           ))}
         </nav>
-        <MobileMenu />
+        <MobileMenu navItems={data.navItems} />
       </div>
     </header>
   );

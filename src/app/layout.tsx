@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-neutral-off-white antialiased`}>
-        <div className="container mx-auto px-4 pb-5 pt-10 md:pt-20 lg:px-10 xl:px-20">
+        <div className="container mx-auto px-4 pb-10 pt-10 md:pt-20 lg:px-10 xl:px-20">
           <Header />
           {children}
         </div>

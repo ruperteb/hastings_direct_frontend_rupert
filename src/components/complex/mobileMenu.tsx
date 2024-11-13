@@ -4,43 +4,29 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
+import { NavItem } from '@/lib/definitions/dataTypes';
 
-const MobileMenu = () => {
-  const links = [
-    {
-      name: 'Home',
-      url: '/',
-    },
-    {
-      name: 'New',
-      url: '/new',
-    },
-    {
-      name: 'Popular',
-      url: '/popular',
-    },
-    {
-      name: 'Trending',
-      url: '/trending',
-    },
-    {
-      name: 'Categories',
-      url: '/categories',
-    },
-  ];
+interface MobileMenuProps {
+  navItems: NavItem[];
+}
 
+const MobileMenu = ({ navItems }: MobileMenuProps) => {
   const [open, setOpen] = useState(false);
 
   const [scrollbarWidth, setScrollbarWidth] = useState(0);
 
   // For adjusting button position when overlay / menu is open
   useEffect(() => {
-    setScrollbarWidth(window.innerWidth - document.body.clientWidth);
+    const width = window.innerWidth - document.body.clientWidth;
+    if (width) {
+      setScrollbarWidth(width);
+    }
   }, []);
 
   // Disable scrolling when overlay / menu is open
   useEffect(() => {
     if (open) {
+      window.scrollTo(0, 0);
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -103,7 +89,7 @@ const MobileMenu = () => {
       <button
         className={clsx(
           'relative z-50 flex h-8 w-10 flex-col justify-between',
-          open && `translate-x-[-${scrollbarWidth}px]`
+          open && scrollbarWidth && `translate-x-[-${scrollbarWidth}px]`
         )}
         onClick={() => setOpen((prev) => !prev)}
       >
@@ -131,7 +117,7 @@ const MobileMenu = () => {
           animate="opened"
           className="justify-top absolute left-0 top-0 z-40 flex h-screen w-[80vw] flex-col items-center gap-8 bg-neutral-off-white pl-8 pt-48 text-2xl text-neutral-very-dark-blue"
         >
-          {links.map((link) => (
+          {navItems.map((link) => (
             <motion.div
               variants={listItemVariants}
               className="self-start"
@@ -144,7 +130,7 @@ const MobileMenu = () => {
           ))}
         </motion.div>
       )}
-      {/* Modal */}
+      {/* Overlay */}
       {open && (
         <motion.div className="absolute left-0 top-0 z-20 h-screen w-screen bg-gray-900/45 bg-blend-overlay backdrop-blur-sm"></motion.div>
       )}

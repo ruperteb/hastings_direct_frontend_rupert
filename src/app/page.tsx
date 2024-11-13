@@ -1,58 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Fragment } from 'react';
+import { getData } from '@/lib/functions/data';
 
-export default function Home() {
-  const mainArticle = {
-    title: 'The Bright Future of Web 3.0?',
-    description:
-      'We dive into the next evolution of the web that claims to put the power of the platforms back into the hands of the people. But is it really fulfilling its promise?',
-    imageUrl: '/images/main-image.jpg',
-    ctaButton: {
-      name: 'READ MORE',
-      url: '/article?id=144',
-    },
-  };
-
-  const sidebar = {
-    title: 'New',
-    articles: [
-      {
-        title: 'Hydrogen VS Electric Cars',
-        description: 'Will hydrogen-fueled cars ever catch up to EVs?',
-        url: '/article?id=124',
-      },
-      {
-        title: 'The Downsides of AI Artistry',
-        description:
-          'What are the possible adverse effects of on-demand AI image generation?',
-        url: '/article?id=132',
-      },
-      {
-        title: 'Is VC Funding Drying Up?',
-        description:
-          'Private funding by VC firms is down 50% YOY. We take a look at what that means.',
-        url: '/article?id=82',
-      },
-    ],
-  };
-
-  const articles = [
-    {
-      title: 'Reviving Retro PCs',
-      description: 'What happens when old PCs are given modern upgrades?',
-      imageUrl: '/images/article1-image.jpg',
-    },
-    {
-      title: 'Top 10 Laptops of 2022',
-      description: 'Our best picks for various needs and budgets.',
-      imageUrl: '/images/article2-image.jpg',
-    },
-    {
-      title: 'The Growth of Gaming',
-      description: 'How the pandemic has sparked fresh opportunities.',
-      imageUrl: '/images/article3-image.jpg',
-    },
-  ];
+export default async function Home() {
+  const data = await getData();
 
   // I wanted to maintain this functionality in server components as far as possible, so avoided using media query hooks etc.
   const getMainImagePath = (breakpoint: string, path: string) => {
@@ -77,7 +29,7 @@ export default function Home() {
         >
           {/* One of these two image components will always be hidden, depending on the breakpoint */}
           <Image
-            src={getMainImagePath('desktop', mainArticle.imageUrl)}
+            src={getMainImagePath('desktop', data.mainArticle.imageUrl)}
             alt="Main article image"
             width={1460}
             height={600}
@@ -85,7 +37,7 @@ export default function Home() {
             priority
           />
           <Image
-            src={getMainImagePath('mobile', mainArticle.imageUrl)}
+            src={getMainImagePath('mobile', data.mainArticle.imageUrl)}
             alt="Main article image"
             width={668}
             height={600}
@@ -97,16 +49,16 @@ export default function Home() {
             className="flex w-full flex-col pt-8 xl:flex-row"
           >
             <h1 className="w-full pb-6 text-6xl font-bold lg:pb-3 xl:w-1/2 xl:pr-12">
-              {mainArticle.title}
+              {data.mainArticle.title}
             </h1>
             <div className="flex w-full flex-col justify-between xl:w-1/2 xl:pl-5">
               <p className="pb-6 text-base leading-[1.6rem] tracking-wide text-neutral-dark-grayish-blue xl:pb-0">
-                {mainArticle.description}
+                {data.mainArticle.description}
               </p>
-              <Link href={mainArticle.ctaButton.url}>
+              <Link href={data.mainArticle.ctaButton.url}>
                 {/* Not sure about the border on this button, from the design it seemed like there might be one so I included it */}
                 <button className="border border-primary-soft-orange bg-primary-soft-red px-8 py-3 text-base font-bold leading-normal tracking-[0.2em] duration-200 hover:border-neutral-very-dark-blue hover:bg-neutral-very-dark-blue hover:text-neutral-off-white">
-                  {mainArticle.ctaButton.name}
+                  {data.mainArticle.ctaButton.name}
                 </button>
               </Link>
             </div>
@@ -119,13 +71,13 @@ export default function Home() {
         >
           <div className="flex h-full flex-col">
             <h2 className="text-4xl font-bold text-primary-soft-orange">
-              {sidebar.title}
+              {data.sidebar.title}
             </h2>
 
             <ul className="mt-8 flex h-full flex-col justify-between">
-              {sidebar.articles.map((article, index) => (
-                <>
-                  <li key={article.title} className="flex flex-col">
+              {data.sidebar.articles.map((article, index) => (
+                <Fragment key={article.title}>
+                  <li className="flex flex-col">
                     <Link href={article.url} className="group flex flex-col">
                       <span className="text-lg font-bold text-white duration-75 group-hover:text-primary-soft-orange">
                         {article.title}
@@ -135,10 +87,10 @@ export default function Home() {
                       </span>
                     </Link>
                   </li>
-                  {index !== sidebar.articles.length - 1 && (
+                  {index !== data.sidebar.articles.length - 1 && (
                     <div className="my-6 h-[1px] w-full bg-neutral-grayish-blue" />
                   )}
-                </>
+                </Fragment>
               ))}
             </ul>
           </div>
@@ -149,7 +101,7 @@ export default function Home() {
         id="articles"
         className="grid gap-8 pt-16 xl:grid-cols-3 xl:gap-0"
       >
-        {articles.map((article, index) => (
+        {data.articles.map((article, index) => (
           <div key={article.title} className="flex lg:mr-4">
             <Image
               src={article.imageUrl}
